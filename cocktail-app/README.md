@@ -1,61 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div class="installation-guide">
+  <h1>Guía Completa de Instalación Laravel con MySQL</h1>
+  
+  <h2>📋 Requisitos Previos</h2>
+  <ul>
+    <li>PHP ≥ 8.1 con extensiones requeridas (pdo, mbstring, etc.)</li>
+    <li>Composer 2.x instalado</li>
+    <li>MySQL ≥ 5.7 en ejecución</li>
+    <li>Node.js ≥ 16.x + npm</li>
+    <li>Git (opcional pero recomendado)</li>
+  </ul>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+  <h2>🚀 1. Configuración Inicial</h2>
+  <pre><code># Clonar repositorio (si aplica)
+git clone https://github.com/tu-proyecto.git
+cd tu-proyecto
 
-## About Laravel
+# Instalar dependencias PHP
+composer install
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# Configurar archivo .env (asegúrate que MySQL esté configurado)
+cp .env.example .env
+nano .env  # Editar con tus credenciales MySQL
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# Generar clave de aplicación
+php artisan key:generate</code></pre>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+  <h3>Configuración MySQL en .env</h3>
+  <pre>DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nombre_bd
+DB_USERNAME=usuario_mysql
+DB_PASSWORD=tu_contraseña</pre>
 
-## Learning Laravel
+  <h2>🗄 2. Base de Datos MySQL</h2>
+  <pre><code># Crear la base de datos (desde MySQL CLI)
+mysql -u root -p
+CREATE DATABASE nombre_bd;
+GRANT ALL PRIVILEGES ON nombre_bd.* TO 'usuario_mysql'@'localhost';
+FLUSH PRIVILEGES;
+exit
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# Ejecutar migraciones y seeders
+php artisan migrate --seed</code></pre>
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+  <h2>🛠 3. Configuración Adicional</h2>
+  <pre><code># Instalar frontend
+npm install
+npm run dev
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Permisos necesarios
+chmod -R 775 storage bootstrap/cache
 
-## Laravel Sponsors
+# Generar enlace de almacenamiento
+php artisan storage:link
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Limpiar caché (si es necesario)
+php artisan optimize:clear</code></pre>
 
-### Premium Partners
+  <h2>⚙️ 4. Iniciar Servidor</h2>
+  <pre><code># Para desarrollo
+php artisan serve
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+# Para producción (configurar Nginx/Apache)
+# Ejemplo configuración Nginx para MySQL:
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}</code></pre>
 
-## Contributing
+  <h2>🔧 Troubleshooting MySQL</h2>
+  <h3>Error de conexión a MySQL</h3>
+  <pre><code># Verificar servicio MySQL
+sudo systemctl status mysql
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Verificar credenciales
+mysql -u tu_usuario -p
+USE nombre_bd;
+SHOW TABLES;</code></pre>
 
-## Code of Conduct
+  <h3>Resetear base de datos completa</h3>
+  <pre><code>php artisan migrate:fresh --seed</code></pre>
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+  <h2>💾 Comandos Útiles con MySQL</h2>
+  <pre><code># Ver conexiones activas MySQL
+php artisan db:show
 
-## Security Vulnerabilities
+# Exportar/Importar datos
+mysqldump -u usuario -p nombre_bd > backup.sql
+mysql -u usuario -p nombre_bd < backup.sql
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Monitorizar consultas MySQL
+php artisan db:monitor</code></pre>
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+  <div class="alert">
+    <strong>Nota:</strong> Asegúrate que el servicio MySQL esté en ejecución antes de iniciar la aplicación Laravel.
+  </div>
+</div>
