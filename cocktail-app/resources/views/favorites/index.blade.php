@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Favoritos')
 @section('content')
 <div class="container">
     <h1 class="my-4">Mis Cócteles Favoritos</h1>

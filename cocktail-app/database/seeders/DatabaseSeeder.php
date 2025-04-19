@@ -25,5 +25,19 @@ class DatabaseSeeder extends Seeder
             ['name' => 'editor'],
             ['name' => 'viewer'],
         ]);
+
+        User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+        ]);
+
+        User::create([
+            'name' => 'Viewer User',
+            'email' => 'viewer@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'viewer',
+        ]);
     }
 }
